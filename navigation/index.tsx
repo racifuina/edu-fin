@@ -64,33 +64,9 @@ function BottomTabNavigator() {
             <BottomTab.Screen
                 name="LearningTab"
                 component={LearningStack}
-                options={({ navigation }) => ({
-                    title: 'Aprendizaje',
+                options={{
                     headerShown: false,
                     tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
-                    headerRight: () => (
-                        <Pressable
-                            onPress={() => navigation.navigate('Modal')}
-                            style={({ pressed }) => ({
-                                opacity: pressed ? 0.5 : 1,
-                            })}
-                        >
-                            <FontAwesome
-                                name="info-circle"
-                                size={25}
-                                color={Colors[colorScheme].text}
-                                style={{ marginRight: 15 }}
-                            />
-                        </Pressable>
-                    ),
-                })}
-            />
-            <BottomTab.Screen
-                name="TabTwo"
-                component={ProfileScreen}
-                options={{
-                    title: 'Perfil',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
             <BottomTab.Screen
@@ -99,6 +75,14 @@ function BottomTabNavigator() {
                 options={{
                     title: 'Beneficios',
                     tabBarIcon: ({ color }) => <TabBarIcon name="ticket" color={color} />,
+                }}
+            />
+            <BottomTab.Screen
+                name="TabTwo"
+                component={ProfileScreen}
+                options={{
+                    title: 'Perfil',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
         </BottomTab.Navigator>

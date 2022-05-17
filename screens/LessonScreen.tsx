@@ -1,41 +1,55 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import { Text, View } from '../components/Themed';
+import { StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Divider } from 'react-native-elements';
+import { Text } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function LessonScreen({ navigation, route }: RootTabScreenProps<'LessonScreen'>) {
-    const { title, description } = route.params;
-    // navigation.setOptions({
-    //     title,
-    // });
+    const { title, image, content, isCompleted } = route.params;
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
+            <Image
+                source={{
+                    uri: image,
+                }}
+                style={{
+                    height: 300,
+                }}
+            ></Image>
             <Text style={styles.title}>{title}</Text>
-            <Text>{description}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('QuizScreen', route.params)} style={styles.link}>
-                <Text style={styles.linkText}>Go take quiz!</Text>
-            </TouchableOpacity>
-        </View>
+            <Text style={{ marginBottom: 20 }}>{content}</Text>
+            {!isCompleted && (
+                <>
+                    <Divider></Divider>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('QuizScreen', route.params)}
+                        style={styles.link}
+                    >
+                        <Text style={styles.linkText}> Tomar la evaluación</Text>
+                    </TouchableOpacity>
+                </>
+            )}
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
+        padding: 8,
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
+        paddingVertical: 20,
     },
     link: {
         marginTop: 15,
-        paddingVertical: 15,
+        paddingBottom: 20,
     },
     linkText: {
         fontSize: 14,
+        fontWeight: 'bold',
         color: '#2e78b7',
     },
 });

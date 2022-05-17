@@ -18,45 +18,50 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
 
     useFocusEffect(
         useCallback(() => {
-            setLoading(true);
-
-            const lessons = db
-                .collection('lessons')
-                .get()
-                .then((snap) => {
-                    const lessons = snap.docs.map((doc) => {
-                        const lesson = doc.data();
-                        lesson.id = doc.id;
-                        return plainToInstance(Lesson, lesson);
-                    });
-
-                    return lessons;
-                });
-
-            const completedLessons = db
-                .collection('completed_lessons')
-                .where('user', '==', 'usuario')
-                .get()
-                .then((snap) => {
-                    const completedLessons = snap.docs.map((doc) => {
-                        const completedLesson = doc.data();
-                        return plainToInstance(CompletedLesson, completedLesson);
-                    });
-
-                    return completedLessons;
-                });
-
-            Promise.all([lessons, completedLessons]).then(([lessons, completedLessons]) => {
-                const filledLessons = lessons.map((lesson) => {
-                    const completedLesson = completedLessons.find((cl) => cl.lessonId === lesson.id);
-                    lesson.isCompleted = !isNil(completedLesson);
-                    return lesson;
-                });
-                setLoading(false);
-                setLessons(filledLessons);
-            });
+            loadLessons();
         }, [])
     );
+
+    const loadLessons = () => {
+        setLoading(true);
+
+        const lessons = db
+            .collection('lessons')
+            .get()
+            .then((snap) => {
+                const lessons = snap.docs.map((doc) => {
+                    const lesson = doc.data();
+                    lesson.id = doc.id;
+                    return plainToInstance(Lesson, lesson);
+                });
+
+                return lessons;
+            });
+
+        const completedLessons = db
+            .collection('completed_lessons')
+            .where('userId', '==', 'usuario')
+            .get()
+            .then((snap) => {
+                const completedLessons = snap.docs.map((doc) => {
+                    const completedLesson = doc.data();
+                    return plainToInstance(CompletedLesson, completedLesson);
+                });
+
+                return completedLessons;
+            });
+
+        Promise.all([lessons, completedLessons]).then(([lessons, completedLessons]) => {
+            const filledLessons = lessons.map((lesson) => {
+                const completedLesson = completedLessons.find((cl) => cl.lessonId === lesson.id);
+                lesson.isCompleted = !isNil(completedLesson);
+                return lesson;
+            });
+            console.log('filledLessons', filledLessons)
+            setLoading(false);
+            setLessons(filledLessons);
+        });
+    };
 
     const onEventPress = (e: Lesson) => {
         navigation.navigate('LessonScreen', e);
@@ -68,9 +73,9 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
                 <Loading isVisible={true} text="Cargando las lecciones" />
             ) : (
                 <Timeline
-                    style={ {
+                    style={{
                         flex: 1,
-                        backgroundColor: backgroundColor
+                        backgroundColor: backgroundColor,
                     }}
                     data={lessons}
                     circleColor="rgba(0,0,0,0)"
@@ -97,5 +102,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-    }
+    },
 });
