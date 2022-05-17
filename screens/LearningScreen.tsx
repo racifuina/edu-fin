@@ -1,53 +1,94 @@
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Timeline, { Data } from 'react-native-timeline-flatlist';
+import { plainToInstance } from 'class-transformer';
+import Timeline from 'react-native-timeline-flatlist';
+import { isNil } from 'lodash';
+import { db } from '../utils/firebase';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { RootTabScreenProps } from '../types';
-import { Lesson } from '../types/lessson';
+import { CompletedLesson, Lesson } from '../types/lessson';
+import Loading from '../components/Loading';
+import { useThemeColor } from '../components/Themed';
 
 export default function LearningScreen({ navigation }: RootTabScreenProps<'LearningScreen'>) {
-    const onEventPress = (e: Lesson) => {
-        navigation.navigate('LessonScreen', e)
-    };
+    const [lessons, setLessons] = useState<Array<Lesson>>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const backgroundColor = useThemeColor({}, 'background');
 
-    const data: Lesson[] = [
-        {
-            title: '🚀 Inicio',
-            description: 'The Beginne does not require you to bring any equipment.',
-        },
-        {
-            title: 'Play Badminton',
-            description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
-        },
-        {
-            title: 'Watch Soccer',
-            description: 'Team sport played between two teams of eleven players with a spherical ball. ',
-        },
-        {
-            title: '🏁 Meta',
-            description: 'Look out for the Best Gym & Fitness Centers around me :)',
-        },
-    ];
+    useFocusEffect(
+        useCallback(() => {
+            setLoading(true);
+
+            const lessons = db
+                .collection('lessons')
+                .get()
+                .then((snap) => {
+                    const lessons = snap.docs.map((doc) => {
+                        const lesson = doc.data();
+                        lesson.id = doc.id;
+                        return plainToInstance(Lesson, lesson);
+                    });
+
+                    return lessons;
+                });
+
+            const completedLessons = db
+                .collection('completed_lessons')
+                .where('user', '==', 'usuario')
+                .get()
+                .then((snap) => {
+                    const completedLessons = snap.docs.map((doc) => {
+                        const completedLesson = doc.data();
+                        return plainToInstance(CompletedLesson, completedLesson);
+                    });
+
+                    return completedLessons;
+                });
+
+            Promise.all([lessons, completedLessons]).then(([lessons, completedLessons]) => {
+                const filledLessons = lessons.map((lesson) => {
+                    const completedLesson = completedLessons.find((cl) => cl.lessonId === lesson.id);
+                    lesson.isCompleted = !isNil(completedLesson);
+                    return lesson;
+                });
+                setLoading(false);
+                setLessons(filledLessons);
+            });
+        }, [])
+    );
+
+    const onEventPress = (e: Lesson) => {
+        navigation.navigate('LessonScreen', e);
+    };
 
     return (
         <View style={styles.container}>
-            <Timeline
-                style={styles.list}
-                data={data}
-                circleColor="rgba(0,0,0,0)"
-                lineColor="rgb(45,156,219)"
-                onEventPress={onEventPress}
-                descriptionStyle={{ color: 'gray' }}
-                separator={false}
-                detailContainerStyle={{
-                    marginTop: 8,
-                    marginBottom: 8,
-                    paddingHorizontal: 8,
-                    backgroundColor: '#BBDAFF',
-                    borderRadius: 10,
-                    marginHorizontal: 5,
-                }}
-                columnFormat="two-column"
-            />
+            {loading ? (
+                <Loading isVisible={true} text="Cargando las lecciones" />
+            ) : (
+                <Timeline
+                    style={ {
+                        flex: 1,
+                        backgroundColor: backgroundColor
+                    }}
+                    data={lessons}
+                    circleColor="rgba(0,0,0,0)"
+                    lineColor="rgb(45,156,219)"
+                    onEventPress={onEventPress}
+                    descriptionStyle={{ color: 'gray' }}
+                    separator={false}
+                    detailContainerStyle={{
+                        marginTop: 8,
+                        marginBottom: 8,
+                        paddingHorizontal: 8,
+                        backgroundColor: '#BBDAFF',
+                        borderRadius: 10,
+                        marginHorizontal: 5,
+                    }}
+                    columnFormat="two-column"
+                />
+            )}
         </View>
     );
 }
@@ -56,8 +97,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-    },
-    list: {
-        flex: 1,
-    },
+    }
 });

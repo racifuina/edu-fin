@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -7,7 +8,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyDIQC6ZiCzXzYFZBA5VXWfabTwkoOIaBrU",
   authDomain: "edu-fin.firebaseapp.com",
-//   databaseURL: "",
+  databaseURL: "https://edu-fin.firebaseio.com",
   projectId: "edu-fin",
   storageBucket: "edu-fin.appspot.com",
   messagingSenderId: "949601664073",
@@ -15,4 +16,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+export const db = firebaseApp.firestore()

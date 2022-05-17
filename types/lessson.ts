@@ -5,7 +5,9 @@ export class Lesson {
     public points?: number;
     public content?: string;
     public image?: string;
+    public isCompleted?: boolean;
     public questions?: Array<Question>;
+
 }
 
 export class Question {
@@ -13,4 +15,9 @@ export class Question {
     options: Array<string>;
     answer: string;
     points: number;
+}
+
+export class CompletedLesson {
+    lessonId: string;
+    userId: string;
 }
