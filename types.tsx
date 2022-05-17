@@ -5,31 +5,38 @@
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Lesson } from './types/lessson';
 
 declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
+    namespace ReactNavigation {
+        interface RootParamList extends RootStackParamList {}
+    }
 }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Modal: undefined;
-  NotFound: undefined;
+    Root: NavigatorScreenParams<RootTabParamList> | undefined;
+    Modal: undefined;
+    NotFound: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
-  RootStackParamList,
-  Screen
+    RootStackParamList,
+    Screen
 >;
 
 export type RootTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+    LearningTab: undefined;
+    TabTwo: undefined;
+    TabThree: undefined;
+    LearningScreen: undefined;
+    LessonScreen: Lesson;
+    QuizScreen: Lesson;
 };
 
+
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<RootTabParamList, Screen>,
-  NativeStackScreenProps<RootStackParamList>
+    BottomTabScreenProps<RootTabParamList, Screen>,
+    NativeStackScreenProps<RootStackParamList>
 >;
