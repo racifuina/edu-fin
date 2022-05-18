@@ -15,9 +15,9 @@ import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import LearningStack from './LearningStack';
+import AccountStack from './AccountStack';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
     return (
@@ -62,7 +62,7 @@ function BottomTabNavigator() {
             }}
         >
             <BottomTab.Screen
-                name="LearningTab"
+                name="Aprendizaje"
                 component={LearningStack}
                 options={{
                     headerShown: false,
@@ -79,9 +79,10 @@ function BottomTabNavigator() {
             />
             <BottomTab.Screen
                 name="TabTwo"
-                component={ProfileScreen}
+                component={AccountStack}
                 options={{
                     title: 'Perfil',
+                    headerShown: false,
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
