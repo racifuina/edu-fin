@@ -27,6 +27,7 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
 
         const lessons = db
             .collection('lessons')
+            .orderBy('points', 'asc')
             .get()
             .then((snap) => {
                 const lessons = snap.docs.map((doc) => {
@@ -57,7 +58,6 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
                 lesson.isCompleted = !isNil(completedLesson);
                 return lesson;
             });
-            console.log('filledLessons', filledLessons)
             setLoading(false);
             setLessons(filledLessons);
         });

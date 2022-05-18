@@ -1,13 +1,33 @@
 import { StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
-import { Text } from '../components/Themed';
+import HTMLView from 'react-native-htmlview';
+import { Text, useThemeColor, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function LessonScreen({ navigation, route }: RootTabScreenProps<'LessonScreen'>) {
     const { title, image, content, isCompleted } = route.params;
+    const textColor = useThemeColor({}, 'text');
+    const backgroundColor = useThemeColor({}, 'background');
+
+    const htmlStyles = StyleSheet.create({
+        p: {
+            color: textColor,
+            backgroundColor: backgroundColor,
+        },
+        h1: {
+            color: textColor,
+            fontSize: 30,
+            fontWeight: 'bold',
+        },
+        h2: {
+            color: textColor,
+            fontSize: 30,
+            fontWeight: 'bold',
+        },
+    });
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={{ backgroundColor, flex: 1, padding: 8 }}>
             <Image
                 source={{
                     uri: image,
@@ -17,7 +37,10 @@ export default function LessonScreen({ navigation, route }: RootTabScreenProps<'
                 }}
             ></Image>
             <Text style={styles.title}>{title}</Text>
-            <Text style={{ marginBottom: 20 }}>{content}</Text>
+            <View style={{ marginBottom: 20 }}>
+                <HTMLView value={content!} stylesheet={htmlStyles} />
+            </View>
+
             {!isCompleted && (
                 <>
                     <Divider></Divider>
@@ -34,10 +57,6 @@ export default function LessonScreen({ navigation, route }: RootTabScreenProps<'
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 8,
-    },
     title: {
         fontSize: 20,
         fontWeight: 'bold',

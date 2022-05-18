@@ -14,7 +14,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import BeneficiosScreen from '../screens/BeneficiosScreen';
+import BenefitsScreen from '../screens/BenefitsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import LearningStack from './LearningStack';
@@ -71,7 +71,7 @@ function BottomTabNavigator() {
             />
             <BottomTab.Screen
                 name="TabThree"
-                component={BeneficiosScreen}
+                component={BenefitsScreen}
                 options={{
                     title: 'Beneficios',
                     tabBarIcon: ({ color }) => <TabBarIcon name="ticket" color={color} />,
