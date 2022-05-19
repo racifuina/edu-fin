@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import * as firebase from 'firebase';
 import UserGuest from './UserGuest';
 import UserLogged from './UserLogged';
+import { auth } from '../../utils/firebase';
 import Loading from '../../components/Loading';
 
 export default function Account() {
     const [login, setLogin] = useState<boolean | null>(null);
 
-    firebase.auth().onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
         !user ? setLogin(false) : setLogin(true);
     });
 

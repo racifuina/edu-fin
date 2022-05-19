@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { plainToInstance } from 'class-transformer';
 import Timeline from 'react-native-timeline-flatlist';
 import { isNil } from 'lodash';
-import { db } from '../utils/firebase';
+import { auth, db } from '../utils/firebase';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { RootTabScreenProps } from '../types';
@@ -14,6 +14,7 @@ import { useThemeColor } from '../components/Themed';
 export default function LearningScreen({ navigation }: RootTabScreenProps<'LearningScreen'>) {
     const [lessons, setLessons] = useState<Array<Lesson>>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
     const backgroundColor = useThemeColor({}, 'background');
 
     useFocusEffect(
@@ -39,20 +40,21 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
                 return lessons;
             });
 
+        const userId = isNil(auth.currentUser?.uid) ? 'n-a' : auth.currentUser?.uid;
         const completedLessons = db
             .collection('completed_lessons')
-            .where('userId', '==', 'usuario')
+            .where('userId', '==', userId)
             .get()
             .then((snap) => {
                 const completedLessons = snap.docs.map((doc) => {
                     const completedLesson = doc.data();
                     return plainToInstance(CompletedLesson, completedLesson);
                 });
-
                 return completedLessons;
             });
 
         Promise.all([lessons, completedLessons]).then(([lessons, completedLessons]) => {
+            console.log('completedLessons', completedLessons)
             const filledLessons = lessons.map((lesson) => {
                 const completedLesson = completedLessons.find((cl) => cl.lessonId === lesson.id);
                 lesson.isCompleted = !isNil(completedLesson);

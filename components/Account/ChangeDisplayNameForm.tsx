@@ -1,16 +1,9 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
-import * as firebase from 'firebase';
+import React, { useState } from 'react';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import { auth } from '../../utils/firebase';
 
-const showAlert = (message) => Alert.alert(
-    "Error",
-    message,
-    [
-        { text: "Aceptar" }
-    ],
-    { cancelable: false }
-);
+const showAlert = (message) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
 
 export default function ChangeDisplayNameForm(props) {
     const { displayName, setShowModal, setReloadUserInfo } = props;
@@ -21,37 +14,36 @@ export default function ChangeDisplayNameForm(props) {
     const onSubmit = () => {
         setError(null);
         if (!newDisplayName) {
-            setError("Este campo es obligatorio")
+            setError('Este campo es obligatorio');
         } else if (newDisplayName === displayName) {
-            setError("El nombre no puede ser igual al actual")
+            setError('El nombre no puede ser igual al actual');
         } else {
-            setIsLoading(true)
-            firebase.auth().currentUser.updateProfile({ displayName: newDisplayName })
-                .then(response => {
+            setIsLoading(true);
+            auth.currentUser!.updateProfile({ displayName: newDisplayName })
+                .then((response) => {
                     setIsLoading(false);
                     setShowModal(false);
                     setReloadUserInfo(true);
-                }).catch(err => {
-                    setIsLoading(false);
-                    showAlert("Ocurrió un error al actualizar el nombre")
                 })
+                .catch((err) => {
+                    setIsLoading(false);
+                    showAlert('Ocurrió un error al actualizar el nombre');
+                });
         }
-    }
+    };
 
     return (
-        <View
-            style={styles.view}
-        >
+        <View style={styles.view}>
             <Input
                 placeholder="Nombre y Apellido"
                 containerStyle={styles.input}
                 rightIcon={{
-                    type: "material-community",
-                    name: "account-circle-outline",
-                    color: "#c2c2c2"
+                    type: 'material-community',
+                    name: 'account-circle-outline',
+                    color: '#c2c2c2',
                 }}
-                defaultValue={displayName || ""}
-                onChange={e => setNewDisplayName(e.nativeEvent.text)}
+                defaultValue={displayName || ''}
+                onChange={(e) => setNewDisplayName(e.nativeEvent.text)}
                 errorMessage={error}
             />
             <Button
@@ -62,24 +54,23 @@ export default function ChangeDisplayNameForm(props) {
                 loading={isLoading}
             />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     view: {
-        alignItems: "center",
+        alignItems: 'center',
         paddingBottom: 10,
-        paddingTop: 10
+        paddingTop: 10,
     },
     input: {
-        marginBottom: 10
+        marginBottom: 10,
     },
     buttonContainer: {
         marginTop: 20,
-        width: "95%"
+        width: '95%',
     },
     buttonStyle: {
-        backgroundColor: "#2f95dc"
-    }
+        backgroundColor: '#2f95dc',
+    },
 });
-

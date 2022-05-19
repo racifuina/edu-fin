@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
-import * as firebase from 'firebase';
+import React, { useState } from 'react';
+import { StyleSheet, View, Alert } from 'react-native';
+import { auth } from '../../utils/firebase';
 import { Input, Button } from 'react-native-elements';
-import { size, isEmpty } from 'lodash'
+import { size, isEmpty } from 'lodash';
 import { validateEmail } from '../../utils/validations';
 import { reautenticate } from '../../utils/api';
 
@@ -17,40 +17,42 @@ export default function ChangeEmailForm(props) {
     const onSubmit = () => {
         setErrors({});
         if (!formData.email || email === formData.email) {
-            setErrors({ email: "El correo electrónico no ha cambiado" })
+            setErrors({ email: 'El correo electrónico no ha cambiado' });
         } else if (isEmpty(formData.email) || isEmpty(formData.password)) {
-            showAlert("Todos los campos son obligatorios")
+            showAlert('Todos los campos son obligatorios');
         } else if (!validateEmail(formData.email)) {
-            setErrors({ email: "Correo electrónico no valido" })
+            setErrors({ email: 'Correo electrónico no valido' });
         } else if (size(formData.password) < 6) {
-            setErrors({ password: "La contraseña debe tener al menos 6 caracteres" })
+            setErrors({ password: 'La contraseña debe tener al menos 6 caracteres' });
         } else {
-            setIsLoading(true)
-            reautenticate(formData.password).then(response => {
-                firebase.auth().currentUser.updateEmail(formData.email)
-                    .then(response => {
-                        setIsLoading(false);
-                        setShowModal(false);
-                        setReloadUserInfo(true);
-                    }).catch(err => {
-                        setIsLoading(false);
-                        showAlert("Ocurrió un error al actualizar el correo electrónico")
-                    })
-            }).catch(err => {
-                setIsLoading(false);
-                showAlert("La contraseña es incorrecta.")
-            });
+            setIsLoading(true);
+            reautenticate(formData.password)
+                .then((response) => {
+                    auth.currentUser
+                        .updateEmail(formData.email)
+                        .then((response) => {
+                            setIsLoading(false);
+                            setShowModal(false);
+                            setReloadUserInfo(true);
+                        })
+                        .catch((err) => {
+                            setIsLoading(false);
+                            showAlert('Ocurrió un error al actualizar el correo electrónico');
+                        });
+                })
+                .catch((err) => {
+                    setIsLoading(false);
+                    showAlert('La contraseña es incorrecta.');
+                });
         }
-    }
+    };
 
     const onChange = (e, type) => {
-        setFormData({ ...formData, [type]: e.nativeEvent.text })
-    }
+        setFormData({ ...formData, [type]: e.nativeEvent.text });
+    };
 
     return (
-        <View
-            style={styles.view}
-        >
+        <View style={styles.view}>
             <Input
                 placeholder="Correo electrónico"
                 containerStyle={styles.input}
@@ -59,12 +61,12 @@ export default function ChangeEmailForm(props) {
                 keyboardType="email-address"
                 autoCorrect={false}
                 rightIcon={{
-                    type: "material-community",
-                    name: "at",
-                    color: "#c2c2c2"
+                    type: 'material-community',
+                    name: 'at',
+                    color: '#c2c2c2',
                 }}
-                defaultValue={email || ""}
-                onChange={e => onChange(e, "email")}
+                defaultValue={email || ''}
+                onChange={(e) => onChange(e, 'email')}
                 errorMessage={errors.email}
             />
             <Input
@@ -73,12 +75,12 @@ export default function ChangeEmailForm(props) {
                 password={true}
                 secureTextEntry={!showPassword}
                 rightIcon={{
-                    type: "material-community",
-                    name: showPassword ? "eye-off-outline" : "eye-outline",
-                    color: "#c2c2c2",
-                    onPress: () => setShowPassword(show => !show)
+                    type: 'material-community',
+                    name: showPassword ? 'eye-off-outline' : 'eye-outline',
+                    color: '#c2c2c2',
+                    onPress: () => setShowPassword((show) => !show),
                 }}
-                onChange={e => onChange(e, "password")}
+                onChange={(e) => onChange(e, 'password')}
                 errorMessage={errors.password}
             />
             <Button
@@ -89,40 +91,32 @@ export default function ChangeEmailForm(props) {
                 loading={isLoading}
             />
         </View>
-    )
+    );
 }
 
 function defaultFormValues() {
     return {
-        email: "",
-        password: ""
-    }
+        email: '',
+        password: '',
+    };
 }
 
 const styles = StyleSheet.create({
     view: {
-        alignItems: "center",
+        alignItems: 'center',
         paddingBottom: 10,
-        paddingTop: 10
+        paddingTop: 10,
     },
     input: {
-        marginBottom: 10
+        marginBottom: 10,
     },
     buttonContainer: {
         marginTop: 20,
-        width: "95%"
+        width: '95%',
     },
     buttonStyle: {
-        backgroundColor: "#2f95dc"
-    }
+        backgroundColor: '#2f95dc',
+    },
 });
 
-const showAlert = (message) => Alert.alert(
-    "Error",
-    message,
-    [
-        { text: "Aceptar" }
-    ],
-    { cancelable: false }
-);
-
+const showAlert = (message) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
