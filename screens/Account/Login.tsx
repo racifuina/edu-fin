@@ -7,10 +7,10 @@ import LoginForm from '../../components/Account/LoginForm'
 export default function Login() {
     return (
         <ScrollView>
-            <Image
+            {/* <Image
                 source={require('../../assets/img/5-tenedores-letras-icono-logo.png')}
                 resizeMode="contain"
-                style={styles.logo} />
+                style={styles.logo} /> */}
             <View style={styles.viewContainer}>
                 <LoginForm />
                 <CreateAccount />

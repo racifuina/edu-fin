@@ -69,8 +69,8 @@ export default function InfoUser(props) {
             <Avatar
                 rounded
                 size="large"
-                showEditButton
-                onEditPress={changeAvatar}
+                // showEditButton
+                // onEditPress={changeAvatar}
                 containerStyle={styles.userInfoAvatar}
                 source={photoURL ? { uri: photoURL } : require('../../assets/img/avatar-default.jpg')}
             />
