@@ -41,6 +41,7 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
             });
 
         const userId = isNil(auth.currentUser?.uid) ? 'n-a' : auth.currentUser?.uid;
+
         const completedLessons = db
             .collection('completed_lessons')
             .where('userId', '==', userId)
@@ -54,10 +55,16 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
             });
 
         Promise.all([lessons, completedLessons]).then(([lessons, completedLessons]) => {
-            console.log('completedLessons', completedLessons)
             const filledLessons = lessons.map((lesson) => {
                 const completedLesson = completedLessons.find((cl) => cl.lessonId === lesson.id);
-                lesson.isCompleted = !isNil(completedLesson);
+                if (!isNil(auth.currentUser)) {
+                    lesson.isCompleted = !isNil(completedLesson);
+                    lesson.title = `${lesson.isCompleted ? '✅' : '⭕️'} ${lesson.title}`;
+                    lesson.description = lesson.isCompleted
+                        ? lesson.description
+                        : `${lesson.description}\n\n${lesson.points} Puntos`;
+                }
+
                 return lesson;
             });
             setLoading(false);

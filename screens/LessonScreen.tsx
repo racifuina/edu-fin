@@ -1,8 +1,10 @@
+import { isNil } from 'lodash';
 import { StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 import { Text, useThemeColor, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import { auth } from '../utils/firebase';
 
 export default function LessonScreen({ navigation, route }: RootTabScreenProps<'LessonScreen'>) {
     const { title, image, content, isCompleted } = route.params;
@@ -41,7 +43,7 @@ export default function LessonScreen({ navigation, route }: RootTabScreenProps<'
                 <HTMLView value={content!} stylesheet={htmlStyles} />
             </View>
 
-            {!isCompleted && (
+            {!isCompleted && !isNil(auth.currentUser) && (
                 <>
                     <Divider></Divider>
                     <TouchableOpacity
