@@ -16,6 +16,6 @@ export default {
         tint: tintColorDark,
         tabIconDefault: '#ccc',
         tabIconSelected: tintColorDark,
-        overlay: 'rgba(0, 0, 0, 1)',
+        overlay: 'rgba(0, 0, 0, 0.5)',
     },
 };
