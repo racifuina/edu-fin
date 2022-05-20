@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { plainToInstance } from 'class-transformer';
 import Timeline from 'react-native-timeline-flatlist';
 import { isNil } from 'lodash';
@@ -9,7 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { RootTabScreenProps } from '../types';
 import { CompletedLesson, Lesson } from '../types/lessson';
 import Loading from '../components/Loading';
-import { useThemeColor } from '../components/Themed';
+import { useThemeColor, View } from '../components/Themed';
 
 export default function LearningScreen({ navigation }: RootTabScreenProps<'LearningScreen'>) {
     const [lessons, setLessons] = useState<Array<Lesson>>([]);
@@ -77,15 +77,11 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
     };
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1 }}>
             {loading ? (
                 <Loading isVisible={true} text="Cargando las lecciones" />
             ) : (
                 <Timeline
-                    style={{
-                        flex: 1,
-                        backgroundColor: backgroundColor,
-                    }}
                     data={lessons}
                     circleColor="rgba(0,0,0,0)"
                     lineColor="rgb(45,156,219)"
@@ -106,10 +102,3 @@ export default function LearningScreen({ navigation }: RootTabScreenProps<'Learn
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
-});

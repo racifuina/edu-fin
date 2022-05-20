@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { auth } from '../../utils/firebase';
 import { Input, Button } from 'react-native-elements';
 import { size, isEmpty } from 'lodash';
 import { reautenticate } from '../../utils/api';
+import { useThemeColor, View } from '../Themed';
 
 export default function ChangePasswordForm(props) {
     const { setShowModal, setReloadUserInfo } = props;
@@ -46,12 +47,15 @@ export default function ChangePasswordForm(props) {
     const onChange = (e, type) => {
         setFormData({ ...formData, [type]: e.nativeEvent.text });
     };
+    const textColor = useThemeColor({}, 'text');
 
     return (
         <View style={styles.view}>
             <Input
                 placeholder="Contraseña actual"
                 containerStyle={styles.input}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 password={true}
                 secureTextEntry={!showPassword}
                 rightIcon={{
@@ -67,6 +71,8 @@ export default function ChangePasswordForm(props) {
                 placeholder="Nueva Contraseña"
                 containerStyle={styles.input}
                 password={true}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 secureTextEntry={!showPassword}
                 rightIcon={{
                     type: 'material-community',
@@ -81,6 +87,8 @@ export default function ChangePasswordForm(props) {
                 placeholder="Confirmar nueva contraseña"
                 containerStyle={styles.input}
                 password={true}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 secureTextEntry={!showPassword}
                 rightIcon={{
                     type: 'material-community',

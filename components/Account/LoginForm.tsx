@@ -12,7 +12,7 @@ export default function LoginForm() {
     const [formData, setFormData] = useState(defaultFormValues());
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
-    const showAlert = (message) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
+    const showAlert = (message: string) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
 
     const onSubmit = () => {
         if (isEmpty(formData.email) || isEmpty(formData.password)) {
@@ -44,7 +44,7 @@ export default function LoginForm() {
             <Input
                 placeholder="Correo Electrónico"
                 autoCapitalize="none"
-                autoCompleteType="email"
+                autoComplete="email"
                 keyboardType="email-address"
                 autoCorrect={false}
                 style={styles.formInput}
@@ -53,7 +53,6 @@ export default function LoginForm() {
             />
             <Input
                 placeholder="Contraseña"
-                password={true}
                 secureTextEntry={!showPassword}
                 style={styles.formInput}
                 rightIcon={

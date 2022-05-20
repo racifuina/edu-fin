@@ -11,13 +11,20 @@ export class Lesson {
 }
 
 export class Question {
-    question: string;
-    options: Array<string>;
-    answer: string;
-    points: number;
+    public question: string;
+    public options: Array<string>;
+    public answer: string;
+    public points: number;
 }
 
 export class CompletedLesson {
-    lessonId: string;
-    userId: string;
+    public lessonId: string;
+    public userId: string;
+}
+
+export class Benefit {
+    public id: string;
+    public title: string;
+    public description: string;
+    public points: number;
 }

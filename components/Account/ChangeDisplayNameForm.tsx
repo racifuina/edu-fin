@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { auth } from '../../utils/firebase';
+import { useThemeColor, View } from '../Themed';
 
-const showAlert = (message) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
+const showAlert = (message: string) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
 
-export default function ChangeDisplayNameForm(props) {
+export default function ChangeDisplayNameForm(props: {
+    displayName: string;
+    setShowModal: any;
+    setReloadUserInfo: any;
+}) {
     const { displayName, setShowModal, setReloadUserInfo } = props;
-    const [newDisplayName, setNewDisplayName] = useState(null);
-    const [error, setError] = useState(null);
+    const [newDisplayName, setNewDisplayName] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = () => {
@@ -20,7 +25,7 @@ export default function ChangeDisplayNameForm(props) {
         } else {
             setIsLoading(true);
             auth.currentUser!.updateProfile({ displayName: newDisplayName })
-                .then((response) => {
+                .then(() => {
                     setIsLoading(false);
                     setShowModal(false);
                     setReloadUserInfo(true);
@@ -31,12 +36,16 @@ export default function ChangeDisplayNameForm(props) {
                 });
         }
     };
+    
+    const textColor = useThemeColor({}, 'text');
 
     return (
         <View style={styles.view}>
             <Input
                 placeholder="Nombre y Apellido"
                 containerStyle={styles.input}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 rightIcon={{
                     type: 'material-community',
                     name: 'account-circle-outline',

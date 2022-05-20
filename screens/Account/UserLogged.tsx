@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 import Loading from '../../components/Loading';
 import InfoUser from '../../components/Account/InfoUser';
 import AccountOptions from '../../components/Account/AccountOptions';
 import { auth } from '../../utils/firebase';
+import { View } from '../../components/Themed';
 
 export default function UserLogged() {
     const [loading, setLoading] = useState(false);
@@ -46,12 +47,11 @@ export default function UserLogged() {
 const styles = StyleSheet.create({
     viewUserInfo: {
         minHeight: '100%',
-        backgroundColor: '#f2f2f2',
     },
     btnSignOut: {
         marginTop: 30,
         borderRadius: 0,
-        backgroundColor: '#fff',
+        backgroundColor: 'red',
         borderTopWidth: 1,
         borderTopColor: '#e3e3e3',
         borderBottomWidth: 1,
@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     btnTitleStyle: {
-        color: '#2f95dc',
+        color: 'white',
     },
 });

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { auth } from '../../utils/firebase';
 import { Input, Button } from 'react-native-elements';
 import { size, isEmpty } from 'lodash';
 import { validateEmail } from '../../utils/validations';
 import { reautenticate } from '../../utils/api';
+import { useThemeColor, View } from '../Themed';
 
 export default function ChangeEmailForm(props) {
     const { email, setShowModal, setReloadUserInfo } = props;
@@ -51,6 +52,8 @@ export default function ChangeEmailForm(props) {
         setFormData({ ...formData, [type]: e.nativeEvent.text });
     };
 
+    const textColor = useThemeColor({}, 'text');
+    
     return (
         <View style={styles.view}>
             <Input
@@ -60,6 +63,8 @@ export default function ChangeEmailForm(props) {
                 autoCompleteType="email"
                 keyboardType="email-address"
                 autoCorrect={false}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 rightIcon={{
                     type: 'material-community',
                     name: 'at',
@@ -73,6 +78,8 @@ export default function ChangeEmailForm(props) {
                 placeholder="Contraseña"
                 containerStyle={styles.input}
                 password={true}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 secureTextEntry={!showPassword}
                 rightIcon={{
                     type: 'material-community',
