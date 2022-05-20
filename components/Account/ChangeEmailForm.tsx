@@ -53,7 +53,7 @@ export default function ChangeEmailForm(props) {
     };
 
     const textColor = useThemeColor({}, 'text');
-    
+
     return (
         <View style={styles.view}>
             <Input
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
     },
 });
 
-const showAlert = (message) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
+const showAlert = (message: string) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });

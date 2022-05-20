@@ -7,7 +7,6 @@ export class Lesson {
     public image?: string;
     public isCompleted?: boolean;
     public questions?: Array<Question>;
-
 }
 
 export class Question {
@@ -26,5 +25,10 @@ export class Benefit {
     public id: string;
     public title: string;
     public description: string;
+    public points: number;
+}
+export class PointsAssignment {
+    public id?: string;
+    public userId: string;
     public points: number;
 }

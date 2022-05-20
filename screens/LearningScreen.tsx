@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { plainToInstance } from 'class-transformer';
 import Timeline from 'react-native-timeline-flatlist';
 import { isNil } from 'lodash';
@@ -9,14 +8,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { RootTabScreenProps } from '../types';
 import { CompletedLesson, Lesson } from '../types/lessson';
 import Loading from '../components/Loading';
-import { useThemeColor, View } from '../components/Themed';
+import { View } from '../components/Themed';
 
 export default function LearningScreen({ navigation }: RootTabScreenProps<'LearningScreen'>) {
     const [lessons, setLessons] = useState<Array<Lesson>>([]);
     const [loading, setLoading] = useState<boolean>(true);
-
-    const backgroundColor = useThemeColor({}, 'background');
-
     useFocusEffect(
         useCallback(() => {
             loadLessons();
