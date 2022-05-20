@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { Icon, Button, Input } from 'react-native-elements';
 import { validateEmail } from '../../utils/validations';
@@ -6,12 +6,15 @@ import { size, isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../Loading';
 import { auth } from '../../utils/firebase';
+import { useThemeColor } from '../Themed';
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState(defaultFormValues());
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
+
+    const passwordInput = useRef(null)
     const showAlert = (message: string) => Alert.alert('Error', message, [{ text: 'Aceptar' }], { cancelable: false });
 
     const onSubmit = () => {
@@ -38,6 +41,7 @@ export default function LoginForm() {
     const onChange = (e, type) => {
         setFormData({ ...formData, [type]: e.nativeEvent.text });
     };
+    const textColor = useThemeColor({}, 'text');
 
     return (
         <View style={styles.formContainer}>
@@ -46,7 +50,12 @@ export default function LoginForm() {
                 autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
+                returnKeyType='next'
                 autoCorrect={false}
+                autoFocus={true}
+                placeholderTextColor="gray"
+                onSubmitEditing={() => passwordInput.current.focus()}
+                inputStyle={{ color: textColor }}
                 style={styles.formInput}
                 rightIcon={<Icon type="material-community" name="at" iconStyle={styles.iconRight} />}
                 onChange={(e) => onChange(e, 'email')}
@@ -55,6 +64,10 @@ export default function LoginForm() {
                 placeholder="Contraseña"
                 secureTextEntry={!showPassword}
                 style={styles.formInput}
+                ref={passwordInput}
+                returnKeyType='done'
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 rightIcon={
                     <Icon
                         type="material-community"

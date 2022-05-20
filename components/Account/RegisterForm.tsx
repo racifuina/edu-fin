@@ -6,6 +6,7 @@ import { size, isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../Loading';
 import { auth } from '../../utils/firebase';
+import { useThemeColor } from '../Themed';
 
 export default function RegisterForm(props) {
     const [showPassword, setShowPassword] = useState(false);
@@ -36,6 +37,7 @@ export default function RegisterForm(props) {
                 });
         }
     };
+    const textColor = useThemeColor({}, 'text');
 
     const onChange = (e, type) => {
         setFormData({ ...formData, [type]: e.nativeEvent.text });
@@ -48,6 +50,8 @@ export default function RegisterForm(props) {
                 autoCapitalize="none"
                 autoCompleteType="email"
                 keyboardType="email-address"
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 autoCorrect={false}
                 style={styles.formInput}
                 rightIcon={<Icon type="material-community" name="at" iconStyle={styles.iconRight} />}
@@ -58,6 +62,8 @@ export default function RegisterForm(props) {
                 password={true}
                 secureTextEntry={!showPassword}
                 style={styles.formInput}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -70,7 +76,8 @@ export default function RegisterForm(props) {
             />
             <Input
                 placeholder="Repetir contraseña"
-                password={true}
+                placeholderTextColor="gray"
+                inputStyle={{ color: textColor }}
                 secureTextEntry={!showPassword}
                 style={styles.formInput}
                 rightIcon={
